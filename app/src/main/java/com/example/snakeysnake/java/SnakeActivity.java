@@ -1,3 +1,4 @@
+// SnakeActivity.java
 package com.example.snakeysnake.java;
 
 import android.app.Activity;
@@ -8,7 +9,7 @@ import android.view.Display;
 public class SnakeActivity extends Activity {
 
     // Declare an instance of SnakeGame
-    SnakeGame mSnakeGame;
+    private SnakeGame mSnakeGame;
 
     // Set the game up
     @Override
@@ -22,21 +23,21 @@ public class SnakeActivity extends Activity {
         Point size = new Point();
         display.getSize(size);
 
-        // Create a new instance of the SnakeEngine class
+        // Create a new instance of the SnakeGame class
         mSnakeGame = new SnakeGame(this, size);
 
-        // Make snakeEngine the view of the Activity
+        // Make SnakeGame the view of the Activity
         setContentView(mSnakeGame);
     }
 
-    // Start the thread in snakeEngine
+    // Start the thread in SnakeGame
     @Override
     protected void onResume() {
         super.onResume();
         mSnakeGame.resume();
     }
 
-    // Stop the thread in snakeEngine
+    // Stop the thread in SnakeGame
     @Override
     protected void onPause() {
         super.onPause();

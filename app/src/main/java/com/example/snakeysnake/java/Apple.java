@@ -16,12 +16,12 @@ class Apple {
 
     // The location of the apple on the grid
     // Not in pixels
-    private Point location = new Point();
+    private final Point location = new Point();
 
     // The range of values we can choose from
     // to spawn an apple
-    private Point mSpawnRange;
-    private int mSize;
+    private final Point mSpawnRange;
+    private final int mSize;
 
     // An image to represent the apple
     private Bitmap mBitmapApple;

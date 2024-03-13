@@ -18,17 +18,17 @@ import java.util.ArrayList;
 class Snake {
 
     // The location in the grid of all the segments
-    private ArrayList<Point> segmentLocations;
+    private final ArrayList<Point> segmentLocations;
 
     // How big is each segment of the snake?
-    private int mSegmentSize;
+    private final int mSegmentSize;
 
     // How big is the entire grid
-    private Point mMoveRange;
+    private final Point mMoveRange;
 
     // Where is the centre of the screen
     // horizontally in pixels?
-    private int halfWayPoint;
+    private final int halfWayPoint;
 
     // For tracking movement Heading
     private enum Heading {
@@ -132,54 +132,53 @@ class Snake {
 
 
     void move() {
-        // Move the body
-        // Start at the back and move it
-        // to the position of the segment in front of it
-        for (int i = segmentLocations.size() - 1; i > 0; i--) {
+        // Check if the segmentLocations ArrayList is empty
+        if (!segmentLocations.isEmpty()) {
+            // Move the body
+            // Start at the back and move it
+            // to the position of the segment in front of it
+            for (int i = segmentLocations.size() - 1; i > 0; i--) {
 
-            // Make it the same value as the next segment
-            // going forwards towards the head
-            segmentLocations.get(i).x = segmentLocations.get(i - 1).x;
-            segmentLocations.get(i).y = segmentLocations.get(i - 1).y;
+                // Make it the same value as the next segment
+                // going forwards towards the head
+                segmentLocations.get(i).x = segmentLocations.get(i - 1).x;
+                segmentLocations.get(i).y = segmentLocations.get(i - 1).y;
+            }
+
+            // Move the head in the appropriate heading
+            // Get the existing head position
+            Point p = segmentLocations.get(0);
+
+            // Move it appropriately
+            switch (heading) {
+                case UP:
+                    p.y--;
+                    break;
+
+                case RIGHT:
+                    p.x++;
+                    break;
+
+                case DOWN:
+                    p.y++;
+                    break;
+
+                case LEFT:
+                    p.x--;
+                    break;
+            }
         }
-
-        // Move the head in the appropriate heading
-        // Get the existing head position
-        Point p = segmentLocations.get(0);
-
-        // Move it appropriately
-        switch (heading) {
-            case UP:
-                p.y--;
-                break;
-
-            case RIGHT:
-                p.x++;
-                break;
-
-            case DOWN:
-                p.y++;
-                break;
-
-            case LEFT:
-                p.x--;
-                break;
-        }
-
     }
+
 
     boolean detectDeath() {
         // Has the snake died?
-        boolean dead = false;
-
-        // Hit any of the screen edges
-        if (segmentLocations.get(0).x == -1 ||
+        boolean dead = segmentLocations.get(0).x == -1 ||
                 segmentLocations.get(0).x > mMoveRange.x ||
                 segmentLocations.get(0).y == -1 ||
-                segmentLocations.get(0).y > mMoveRange.y) {
+                segmentLocations.get(0).y > mMoveRange.y;
 
-            dead = true;
-        }
+        // Hit any of the screen edges
 
         // Eaten itself?
         for (int i = segmentLocations.size() - 1; i > 0; i--) {
@@ -188,6 +187,7 @@ class Snake {
                     segmentLocations.get(0).y == segmentLocations.get(i).y) {
 
                 dead = true;
+                break;
             }
         }
         return dead;
