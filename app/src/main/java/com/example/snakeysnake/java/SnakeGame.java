@@ -233,10 +233,14 @@ class SnakeGame extends SurfaceView implements Runnable{
 
             // Draw the background
             mBitmapBackground = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.hxh);
-
-            mBitmapBackground = Bitmap.createScaledBitmap(mBitmapBackground, 2200, 1280, false);
-
+            mBitmapBackground = Bitmap.createScaledBitmap(mBitmapBackground, 2300, 1280, false);
             mCanvas.drawBitmap(mBitmapBackground, 0, 0, mPaint);
+
+            // Draw the group members' name
+            mPaint.setColor(Color.argb(255, 255, 255, 255));
+            mPaint.setTextSize(60);
+            mCanvas.drawText("Tony Tran", 1820, 90, mPaint);
+            mCanvas.drawText("Saboor Malik", 1820, 165, mPaint);
 
 
             // Draw the score
