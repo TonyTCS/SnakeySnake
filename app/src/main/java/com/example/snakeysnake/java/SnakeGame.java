@@ -3,6 +3,8 @@ package com.example.snakeysnake.java;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -57,6 +59,9 @@ class SnakeGame extends SurfaceView implements Runnable{
     private boolean mPauseButtonClicked = false;
 
     private boolean mPlayerDead = true;
+
+    // An image to represent the apple
+    private Bitmap mBitmapBackground;
 
 
 
@@ -223,7 +228,18 @@ class SnakeGame extends SurfaceView implements Runnable{
     public void draw() {
         if (mSurfaceHolder.getSurface().isValid()) {
             mCanvas = mSurfaceHolder.lockCanvas();
-            mCanvas.drawColor(Color.argb(255, 26, 128, 182));
+            //mCanvas.drawColor(Color.argb(255, 26, 128, 182));
+            //mCanvas.drawColor(Color.argb(205, 11, 8, 102));
+
+            // Draw the background
+            //mCanvas.drawBitmap(BitmapFactory.decodeResource(), R.drawable.hxh);
+
+            // Draw the background
+            mBitmapBackground = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.hxh);
+
+            //mBitmapBackground = Bitmap.createScaledBitmap(mBitmapBackground, 100, 100, false);
+
+            mCanvas.drawBitmap(mBitmapBackground, 0, 0, mPaint);
 
             // Draw the score
             mPaint.setColor(Color.argb(255, 255, 255, 255));
@@ -249,7 +265,7 @@ class SnakeGame extends SurfaceView implements Runnable{
             if (mPaused && mPlayerDead) {
                 mPaint.setColor(Color.argb(255, 255, 255, 255));
                 mPaint.setTextSize(250);
-                mCanvas.drawText(getResources().getString(R.string.tap_to_play), 200, 700, mPaint);
+                mCanvas.drawText(getResources().getString(R.string.tap_to_play), 450, 500, mPaint);
             }
 
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
@@ -326,5 +342,7 @@ class SnakeGame extends SurfaceView implements Runnable{
         mThread.start();
     }
 }
+
+
 
 
