@@ -182,8 +182,6 @@ class SnakeGame extends SurfaceView implements Runnable{
     }
 
 
-    // Update all the game objects
-// Update all the game objects
 // Update all the game objects
     public void update() {
         // Move the snake
