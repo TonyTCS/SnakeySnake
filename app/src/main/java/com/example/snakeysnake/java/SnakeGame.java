@@ -22,7 +22,7 @@ import android.graphics.Rect;
 
 import com.example.snakeysnake.R;
 
-class SnakeGame extends SurfaceView implements Runnable, GameLifecycle {
+class SnakeGame extends SurfaceView implements Runnable, GameLifecycle,Drawable {
 
     // Objects for the game loop/thread
     private Thread mThread = null;
@@ -159,6 +159,7 @@ class SnakeGame extends SurfaceView implements Runnable, GameLifecycle {
         }
     }
 
+    @Override
     public void draw() {
         if (mSurfaceHolder.getSurface().isValid()) {
             mCanvas = mSurfaceHolder.lockCanvas();
@@ -198,6 +199,10 @@ class SnakeGame extends SurfaceView implements Runnable, GameLifecycle {
 
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
+    }
+    @Override
+    public void draw(Canvas canvas, Paint paint) {
+
     }
 
     @Override

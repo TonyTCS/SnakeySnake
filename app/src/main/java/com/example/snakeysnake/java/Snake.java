@@ -12,7 +12,7 @@ import com.example.snakeysnake.R;
 import java.util.ArrayList;
 
 
-class Snake implements GameObject {
+class Snake implements GameObject, Drawable {
 
     private final ArrayList<Point> segmentLocations;
     private final int mSegmentSize;
@@ -57,6 +57,10 @@ class Snake implements GameObject {
                 canvas.drawBitmap(mBitmapBody, segmentLocations.get(i).x * mSegmentSize, segmentLocations.get(i).y * mSegmentSize, paint);
             }
         }
+    }
+
+    @Override
+    public void draw(){
     }
 
     void reset(int w, int h) {

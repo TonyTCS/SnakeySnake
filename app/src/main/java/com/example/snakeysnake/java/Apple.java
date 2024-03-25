@@ -9,7 +9,7 @@ import java.util.Random;
 
 import com.example.snakeysnake.R;
 
-class Apple implements GameObject {
+class Apple implements GameObject, Drawable {
 
     private final Point location = new Point();
     private final Point mSpawnRange;
@@ -39,5 +39,9 @@ class Apple implements GameObject {
     @Override
     public void draw(Canvas canvas, Paint paint){
         canvas.drawBitmap(mBitmapApple, location.x * mSize, location.y * mSize, paint);
+    }
+
+    @Override
+    public void draw(){
     }
 }
