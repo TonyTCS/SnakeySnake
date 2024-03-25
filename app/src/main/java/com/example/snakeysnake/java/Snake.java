@@ -24,18 +24,18 @@ class Snake extends GameObject implements  Drawable {
     private Bitmap mBitmapBody;
 
     Snake(Context context, Point moveRange, int segmentSize) {
-        segmentLocations = new ArrayList<>();
-        mSegmentSize = segmentSize;
-        mMoveRange = moveRange;
+        this.segmentLocations = new ArrayList<>();
+        this.mSegmentSize = segmentSize;
+        this.mMoveRange = moveRange;
 
-        mBitmapHeads[Heading.RIGHT.ordinal()] = BitmapFactory.decodeResource(context.getResources(), R.drawable.helmet);
-        mBitmapHeads[Heading.LEFT.ordinal()] = flipBitmap(mBitmapHeads[Heading.RIGHT.ordinal()]);
-        mBitmapHeads[Heading.UP.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], -90);
-        mBitmapHeads[Heading.DOWN.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], 180);
+        this.mBitmapHeads[Heading.RIGHT.ordinal()] = BitmapFactory.decodeResource(context.getResources(), R.drawable.helmet);
+        this.mBitmapHeads[Heading.LEFT.ordinal()] = flipBitmap(mBitmapHeads[Heading.RIGHT.ordinal()]);
+        this.mBitmapHeads[Heading.UP.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], -90);
+        this.mBitmapHeads[Heading.DOWN.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], 180);
 
-        mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud);
+        this.mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud);
 
-        halfWayPoint = moveRange.x * segmentSize / 2;
+        this.halfWayPoint = moveRange.x * segmentSize / 2;
     }
 
     @Override
