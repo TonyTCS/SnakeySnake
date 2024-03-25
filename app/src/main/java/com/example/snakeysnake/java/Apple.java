@@ -9,36 +9,43 @@ import java.util.Random;
 
 import com.example.snakeysnake.R;
 
-class Apple implements GameObject, Drawable {
 
-    private final Point location = new Point();
-    private final Point mSpawnRange;
-    private final int mSize;
-    private Bitmap mBitmapApple;
+class Apple extends GameObject implements Drawable {
 
-    Apple(Context context, Point sr, int s){
-        mSpawnRange = sr;
-        mSize = s;
-        location.x = -10;
-        mBitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.moon);
-        mBitmapApple = Bitmap.createScaledBitmap(mBitmapApple, s, s, false);
+    private Point location = new Point();
+    private final Point spawnRange;
+    private final int size;
+    private Bitmap bitmapApple;
+
+    Apple(Context context, Point spawnRange, int size) {
+        this.spawnRange = spawnRange;
+        this.size = size;
+        this.setLocation(-10, -10); // Initialize location off-screen
+        this.bitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.moon);
+        this.bitmapApple = Bitmap.createScaledBitmap(this.bitmapApple, size, size, false);
     }
 
     @Override
-    public void spawn(){
+    public void spawn() {
         Random random = new Random();
-        location.x = random.nextInt(mSpawnRange.x) + 1;
-        location.y = random.nextInt(mSpawnRange.y - 1) + 1;
+        int newX = random.nextInt(spawnRange.x) + 1;
+        int newY = random.nextInt(spawnRange.y - 1) + 1;
+        this.setLocation(newX, newY);
     }
 
     @Override
-    public Point getLocation(){
-        return location;
+    public Point getLocation() {
+        return new Point(location); // Return a copy to maintain encapsulation
+    }
+
+    // Setter method for location
+    private void setLocation(int x, int y) {
+        this.location.set(x, y);
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint){
-        canvas.drawBitmap(mBitmapApple, location.x * mSize, location.y * mSize, paint);
+    public void draw(Canvas canvas, Paint paint) {
+        canvas.drawBitmap(bitmapApple, location.x * size, location.y * size, paint);
     }
 
     @Override

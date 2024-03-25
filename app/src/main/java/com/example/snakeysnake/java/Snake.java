@@ -12,7 +12,7 @@ import com.example.snakeysnake.R;
 import java.util.ArrayList;
 
 
-class Snake implements GameObject, Drawable {
+class Snake extends GameObject implements  Drawable {
 
     private final ArrayList<Point> segmentLocations;
     private final int mSegmentSize;
@@ -20,13 +20,13 @@ class Snake implements GameObject, Drawable {
     private final int halfWayPoint;
     private enum Heading { UP, RIGHT, DOWN, LEFT }
     private Heading heading = Heading.RIGHT;
-    private Bitmap[] mBitmapHeads = new Bitmap[4];
+    private final Bitmap[] mBitmapHeads = new Bitmap[4];
     private Bitmap mBitmapBody;
 
-    Snake(Context context, Point mr, int ss) {
+    Snake(Context context, Point moveRange, int segmentSize) {
         segmentLocations = new ArrayList<>();
-        mSegmentSize = ss;
-        mMoveRange = mr;
+        mSegmentSize = segmentSize;
+        mMoveRange = moveRange;
 
         mBitmapHeads[Heading.RIGHT.ordinal()] = BitmapFactory.decodeResource(context.getResources(), R.drawable.helmet);
         mBitmapHeads[Heading.LEFT.ordinal()] = flipBitmap(mBitmapHeads[Heading.RIGHT.ordinal()]);
@@ -35,7 +35,7 @@ class Snake implements GameObject, Drawable {
 
         mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud);
 
-        halfWayPoint = mr.x * ss / 2;
+        halfWayPoint = moveRange.x * segmentSize / 2;
     }
 
     @Override
@@ -45,7 +45,7 @@ class Snake implements GameObject, Drawable {
 
     @Override
     public Point getLocation() {
-        return segmentLocations.isEmpty() ? new Point(-1, -1) : segmentLocations.get(0);
+        return segmentLocations.isEmpty() ? new Point(-1, -1) : new Point(segmentLocations.get(0));
     }
 
     @Override
@@ -61,51 +61,50 @@ class Snake implements GameObject, Drawable {
 
     @Override
     public void draw(){
+        // Implement if necessary
     }
 
-    void reset(int w, int h) {
+    void reset(int width, int height) {
         heading = Heading.RIGHT;
         segmentLocations.clear();
-        segmentLocations.add(new Point(w / 2, h / 2));
+        segmentLocations.add(new Point(width / 2, height / 2));
     }
 
     void move() {
         if (!segmentLocations.isEmpty()) {
             for (int i = segmentLocations.size() - 1; i > 0; i--) {
-                segmentLocations.get(i).x = segmentLocations.get(i - 1).x;
-                segmentLocations.get(i).y = segmentLocations.get(i - 1).y;
+                Point current = segmentLocations.get(i);
+                Point next = segmentLocations.get(i - 1);
+                current.x = next.x;
+                current.y = next.y;
             }
-            Point p = segmentLocations.get(0);
+            Point head = segmentLocations.get(0);
             switch (heading) {
                 case UP:
-                    p.y--;
+                    head.y--;
                     break;
                 case RIGHT:
-                    p.x++;
+                    head.x++;
                     break;
                 case DOWN:
-                    p.y++;
+                    head.y++;
                     break;
                 case LEFT:
-                    p.x--;
+                    head.x--;
                     break;
             }
         }
     }
 
     boolean detectDeath() {
-        boolean dead = segmentLocations.isEmpty() || segmentLocations.get(0).x == -1 || segmentLocations.get(0).x > mMoveRange.x || segmentLocations.get(0).y == -1 || segmentLocations.get(0).y > mMoveRange.y;
-        for (int i = segmentLocations.size() - 1; i > 0; i--) {
-            if (segmentLocations.get(0).x == segmentLocations.get(i).x && segmentLocations.get(0).y == segmentLocations.get(i).y) {
-                dead = true;
-                break;
-            }
-        }
-        return dead;
+        if (segmentLocations.isEmpty()) return true;
+
+        Point head = segmentLocations.get(0);
+        return head.x == -1 || head.x > mMoveRange.x || head.y == -1 || head.y > mMoveRange.y || checkSelfCollision();
     }
 
-    boolean checkDinner(Point l) {
-        if (!segmentLocations.isEmpty() && segmentLocations.get(0).equals(l)) {
+    boolean checkDinner(Point location) {
+        if (!segmentLocations.isEmpty() && segmentLocations.get(0).equals(location)) {
             segmentLocations.add(new Point(-10, -10));
             return true;
         }
@@ -113,36 +112,44 @@ class Snake implements GameObject, Drawable {
     }
 
     void switchHeading(MotionEvent motionEvent) {
-        if (motionEvent.getX() >= halfWayPoint) {
-            switch (heading) {
-                case UP:
-                    heading = Heading.RIGHT;
-                    break;
-                case RIGHT:
-                    heading = Heading.DOWN;
-                    break;
-                case DOWN:
-                    heading = Heading.LEFT;
-                    break;
-                case LEFT:
-                    heading = Heading.UP;
-                    break;
-            }
-        } else {
-            switch (heading) {
-                case UP:
-                    heading = Heading.LEFT;
-                    break;
-                case LEFT:
-                    heading = Heading.DOWN;
-                    break;
-                case DOWN:
-                    heading = Heading.RIGHT;
-                    break;
-                case RIGHT:
-                    heading = Heading.UP;
-                    break;
-            }
+        heading = (motionEvent.getX() >= halfWayPoint) ? getNextClockwiseHeading() : getNextCounterClockwiseHeading();
+    }
+
+    private boolean checkSelfCollision() {
+        Point head = segmentLocations.get(0);
+        for (int i = 1; i < segmentLocations.size(); i++) {
+            if (head.equals(segmentLocations.get(i))) return true;
+        }
+        return false;
+    }
+
+    private Heading getNextClockwiseHeading() {
+        switch (heading) {
+            case UP:
+                return Heading.RIGHT;
+            case RIGHT:
+                return Heading.DOWN;
+            case DOWN:
+                return Heading.LEFT;
+            case LEFT:
+                return Heading.UP;
+            default:
+                return heading;
+        }
+    }
+
+    private Heading getNextCounterClockwiseHeading() {
+        switch (heading) {
+            case UP:
+                return Heading.LEFT;
+            case LEFT:
+                return Heading.DOWN;
+            case DOWN:
+                return Heading.RIGHT;
+            case RIGHT:
+                return Heading.UP;
+            default:
+                return heading;
         }
     }
 

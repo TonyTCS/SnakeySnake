@@ -12,14 +12,7 @@ public class SnakeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        mSnakeGame = new SnakeGame(this, size);
-
-        setContentView(mSnakeGame);
+        initializeSnakeGame();
     }
 
     @Override
@@ -32,6 +25,14 @@ public class SnakeActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mSnakeGame.pause();
+    }
+
+    private void initializeSnakeGame() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        mSnakeGame = new SnakeGame(this, size);
+        setContentView(mSnakeGame);
     }
 }
 
