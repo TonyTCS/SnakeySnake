@@ -159,10 +159,11 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         paint.setTextSize(60);
         paint.setTypeface(typeface); // Set custom font
 
-        // Draw "Tony Tran"
-        mCanvas.drawText("Tony Tran", mCanvas.getWidth() - 400, 90, paint);
-        // Draw "Saboor Malik"
-        mCanvas.drawText("Saboor Malik", mCanvas.getWidth() - 400, 165, paint);
+        // Draw teammates names
+        mCanvas.drawText("Tony Tran", mCanvas.getWidth() - 400, 60, paint);
+        mCanvas.drawText("Maria Valencia", mCanvas.getWidth() - 470, 135, paint);
+        mCanvas.drawText("Armaan Randhawa", mCanvas.getWidth() - 550, 205, paint);
+        mCanvas.drawText("Brian Hert", mCanvas.getWidth() - 415, 280, paint);
     }
 
 
