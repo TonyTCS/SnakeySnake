@@ -160,7 +160,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         // Draw the group members' names with transparency and custom font
         Paint paint = new Paint();
         paint.setColor(Color.argb(alphaValue, 255, 255, 255)); // Set color to white with alpha
-        paint.setTextSize(60);
+        paint.setTextSize(43);
         paint.setTypeface(typeface); // Set custom font
 
         // Draw teammates names
