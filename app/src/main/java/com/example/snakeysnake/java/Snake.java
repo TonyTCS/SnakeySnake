@@ -21,7 +21,11 @@ public class Snake extends GameObject implements Drawable {
     private Heading heading = Heading.RIGHT;
     private final Bitmap[] mBitmapHeads = new Bitmap[4];
     private Bitmap mBitmapBody;
-    private int speed = 1; // Default speed of the snake
+    private float speed = 1.0f; // Default speed of the snake
+
+    public float getSpeed() {
+        return getSpeed();
+    }
 
     Snake(Context context, Point moveRange, int segmentSize) {
         this.segmentLocations = new ArrayList<>();
@@ -68,35 +72,45 @@ public class Snake extends GameObject implements Drawable {
         heading = Heading.RIGHT;
         segmentLocations.clear();
         segmentLocations.add(new Point(width / 2, height / 2));
-        speed = 1; // Reset speed when game is reset
+        speed = 1.0f; // Reset speed when game is reset
     }
 
-    void move() {
-        if (!segmentLocations.isEmpty()) {
-            for (int i = segmentLocations.size() - 1; i > 0; i--) {
-                Point current = segmentLocations.get(i);
-                Point next = segmentLocations.get(i - 1);
-                current.x = next.x;
-                current.y = next.y;
-            }
-            Point head = segmentLocations.get(0);
-            switch (heading) {
-                case UP:
-                    head.y -= speed;
-                    break;
-                case RIGHT:
-                    head.x += speed;
-                    break;
-                case DOWN:
-                    head.y += speed;
-                    break;
-                case LEFT:
-                    head.x -= speed;
-                    break;
-            }
-        }
-    }
+   void move() {
+       // Move the body
+       // Start at the back and move it
+       // to the position of the segment in front of it
+       for (int i = segmentLocations.size() - 1; i > 0; i--) {
 
+           // Make it the same value as the next segment
+           // going forwards towards the head
+           segmentLocations.get(i).x = segmentLocations.get(i - 1).x;
+           segmentLocations.get(i).y = segmentLocations.get(i - 1).y;
+       }
+
+       // Move the head in the appropriate heading
+       // Get the existing head position
+       Point p = segmentLocations.get(0);
+
+       // Move it appropriately
+       switch (heading) {
+           case UP:
+               p.y--;
+               break;
+
+           case RIGHT:
+               p.x++;
+               break;
+
+           case DOWN:
+               p.y++;
+               break;
+
+           case LEFT:
+               p.x--;
+               break;
+       }
+
+   }
     void increaseSize() {
         if (!segmentLocations.isEmpty()) {
             Point tail = segmentLocations.get(segmentLocations.size() - 1);
@@ -109,16 +123,43 @@ public class Snake extends GameObject implements Drawable {
             speed++;
         }
     }
-    boolean detectDeath() {
-        if (segmentLocations.isEmpty()) return true;
 
-        Point head = segmentLocations.get(0);
-        return head.x == -1 || head.x >= mMoveRange.x || head.y == -1 || head.y >= mMoveRange.y || checkSelfCollision();
-    }
+   boolean detectDeath() {
+       // Has the snake died?
+       boolean dead = false;
 
-    boolean checkDinner(Point location) {
-        if (!segmentLocations.isEmpty() && segmentLocations.get(0).equals(location)) {
-            increaseSize();
+       // Hit any of the screen edges
+       if (segmentLocations.get(0).x == -1 ||
+               segmentLocations.get(0).x > mMoveRange.x ||
+               segmentLocations.get(0).y == -1 ||
+               segmentLocations.get(0).y > mMoveRange.y) {
+
+           dead = true;
+       }
+       // Eaten itself?
+       for (int i = segmentLocations.size() - 1; i > 0; i--) {
+           // Have any of the sections collided with the head
+           if (segmentLocations.get(0).x == segmentLocations.get(i).x &&
+                   segmentLocations.get(0).y == segmentLocations.get(i).y) {
+
+               dead = true;
+           }
+       }
+       return dead;
+   }
+
+
+    boolean checkDinner(Point l) {
+        //if (snakeXs[0] == l.x && snakeYs[0] == l.y) {
+        if (segmentLocations.get(0).x == l.x &&
+                segmentLocations.get(0).y == l.y) {
+
+            // Add a new Point to the list
+            // located off-screen.
+            // This is OK because on the next call to
+            // move it will take the position of
+            // the segment in front of it
+            segmentLocations.add(new Point(-10, -10));
             return true;
         }
         return false;
@@ -128,13 +169,6 @@ public class Snake extends GameObject implements Drawable {
         heading = (motionEvent.getX() >= halfWayPoint) ? getNextClockwiseHeading() : getNextCounterClockwiseHeading();
     }
 
-    private boolean checkSelfCollision() {
-        Point head = segmentLocations.get(0);
-        for (int i = 1; i < segmentLocations.size(); i++) {
-            if (head.equals(segmentLocations.get(i))) return true;
-        }
-        return false;
-    }
 
     private Heading getNextClockwiseHeading() {
         switch (heading) {
