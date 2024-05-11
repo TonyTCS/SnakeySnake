@@ -11,8 +11,7 @@ import android.view.MotionEvent;
 import com.example.snakeysnake.R;
 import java.util.ArrayList;
 
-
-class Snake extends GameObject implements  Drawable {
+public class Snake extends GameObject implements Drawable {
 
     private final ArrayList<Point> segmentLocations;
     private final int mSegmentSize;
@@ -22,6 +21,7 @@ class Snake extends GameObject implements  Drawable {
     private Heading heading = Heading.RIGHT;
     private final Bitmap[] mBitmapHeads = new Bitmap[4];
     private Bitmap mBitmapBody;
+    private int speed = 1; // Default speed of the snake
 
     Snake(Context context, Point moveRange, int segmentSize) {
         this.segmentLocations = new ArrayList<>();
@@ -60,14 +60,15 @@ class Snake extends GameObject implements  Drawable {
     }
 
     @Override
-    public void draw(){
-        // Implement if necessary
+    public void draw() {
+
     }
 
     void reset(int width, int height) {
         heading = Heading.RIGHT;
         segmentLocations.clear();
         segmentLocations.add(new Point(width / 2, height / 2));
+        speed = 1; // Reset speed when game is reset
     }
 
     void move() {
@@ -81,31 +82,43 @@ class Snake extends GameObject implements  Drawable {
             Point head = segmentLocations.get(0);
             switch (heading) {
                 case UP:
-                    head.y--;
+                    head.y -= speed;
                     break;
                 case RIGHT:
-                    head.x++;
+                    head.x += speed;
                     break;
                 case DOWN:
-                    head.y++;
+                    head.y += speed;
                     break;
                 case LEFT:
-                    head.x--;
+                    head.x -= speed;
                     break;
             }
         }
     }
 
+    void increaseSize() {
+        if (!segmentLocations.isEmpty()) {
+            Point tail = segmentLocations.get(segmentLocations.size() - 1);
+            segmentLocations.add(new Point(tail.x, tail.y));
+        }
+    }
+    void increaseSpeed() {
+        final int maxSpeed = 10;
+        if (speed < maxSpeed) {
+            speed++;
+        }
+    }
     boolean detectDeath() {
         if (segmentLocations.isEmpty()) return true;
 
         Point head = segmentLocations.get(0);
-        return head.x == -1 || head.x > mMoveRange.x || head.y == -1 || head.y > mMoveRange.y || checkSelfCollision();
+        return head.x == -1 || head.x >= mMoveRange.x || head.y == -1 || head.y >= mMoveRange.y || checkSelfCollision();
     }
 
     boolean checkDinner(Point location) {
         if (!segmentLocations.isEmpty() && segmentLocations.get(0).equals(location)) {
-            segmentLocations.add(new Point(-10, -10));
+            increaseSize();
             return true;
         }
         return false;
@@ -165,4 +178,3 @@ class Snake extends GameObject implements  Drawable {
         return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
     }
 }
-

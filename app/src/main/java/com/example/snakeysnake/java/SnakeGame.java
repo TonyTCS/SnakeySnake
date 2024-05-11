@@ -51,12 +51,16 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         mSoundManager = new SoundManager(context);
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
-        mApple = new Apple(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
+
+        // Choose the appropriate AppleType
+        AppleType appleType = new SpeedApple(); // Or NormalApple, or any other specific type
+
+        mApple = new Apple(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize, appleType);
         mSnake = new Snake(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
+
         int buttonSize = blockSize * 3;
         mPauseButtonRect = new Rect(0, size.y - buttonSize, buttonSize, size.y);
     }
-
     @Override
     public void run() {
         while (mPlaying) {
