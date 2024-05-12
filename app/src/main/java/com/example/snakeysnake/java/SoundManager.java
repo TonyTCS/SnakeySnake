@@ -18,6 +18,8 @@ public class SoundManager {
     private int mCrashSoundId;
     private int mSpeedUpId;
 
+    private int mStatsDownId;
+
     private int mGrowId;
 
     public SoundManager(Context context) {
@@ -47,6 +49,7 @@ public class SoundManager {
         loadSound(assetManager, "good.ogg", id -> mLevelUpSoundId = id);
         loadSound(assetManager, "agility.ogg", id -> mSpeedUpId = id);
         loadSound(assetManager, "grow.ogg", id -> mGrowId = id);
+        loadSound(assetManager, "stats_down.ogg", id -> mStatsDownId = id);
     }
 
     private void loadSound(AssetManager assetManager, String fileName, SoundIdUpdater updater) {
@@ -80,6 +83,10 @@ public class SoundManager {
 
     public void playGrow(){
         playSound(mGrowId);
+    }
+
+    public void playStatsDown(){
+        playSound(mStatsDownId);
     }
 
 

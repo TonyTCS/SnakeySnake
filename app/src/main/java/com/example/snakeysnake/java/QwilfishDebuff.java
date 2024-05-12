@@ -11,28 +11,25 @@ import com.example.snakeysnake.R;
 
 import java.util.Random;
 
-public class SharpedoPowerUp implements PowerUps {
+public class QwilfishDebuff implements PowerUps {
 
-    //    private static final int SPEED_UP_FPS = 10;
     private Context context;
     private final Point spawnRange;
     private final int size;
-    private Bitmap sharpedoBitmap;
+    private Bitmap qwilfishBitmap;
     private final Point location = new Point();
 
-
-    public SharpedoPowerUp(Context context, Point spawnRange, int size) {
+    public QwilfishDebuff(Context context, Point spawnRange, int size) {
         this.context = context;
         this.spawnRange = spawnRange;
         this.size = size;
-        sharpedoBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sharpedo);
-        sharpedoBitmap = Bitmap.createScaledBitmap(sharpedoBitmap, size,size,false);
+        qwilfishBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.qwilfish);
+        qwilfishBitmap = Bitmap.createScaledBitmap(qwilfishBitmap, size, size, false);
     }
 
     @Override
     public void applyPowerUps(SnakeGame sg) {
-        int currentFPS = sg.getTargetFPS();
-        sg.setTargetFPS(currentFPS + 3);
+        sg.decrementScore(); // Method to decrement the score
     }
 
     public Point getLocation() {
@@ -51,6 +48,6 @@ public class SharpedoPowerUp implements PowerUps {
     }
 
     public void draw(Canvas canvas, Paint paint) {
-        canvas.drawBitmap(sharpedoBitmap, getLocation().x * size, getLocation().y * size, paint);
+        canvas.drawBitmap(qwilfishBitmap, location.x * size, location.y * size, paint);
     }
 }

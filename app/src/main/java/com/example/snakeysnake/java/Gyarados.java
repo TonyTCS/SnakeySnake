@@ -41,34 +41,37 @@ class Gyarados extends GameObject implements  Drawable {
         this.doubleSize = false;
     }
 
-    public void doubleSize(){
-        for (int i = 0; i < mBitmapHeads.length; i++) {
-            mBitmapHeads[i] = Bitmap.createScaledBitmap(mBitmapHeads[i],
-                    mBitmapHeads[i].getWidth() * 2,
-                    mBitmapHeads[i].getHeight() * 2,
+    public void doubleSize() {
+        if (!doubleSize) {  // Only double size if not already doubled
+            for (int i = 0; i < mBitmapHeads.length; i++) {
+                mBitmapHeads[i] = Bitmap.createScaledBitmap(mBitmapHeads[i],
+                        mBitmapHeads[i].getWidth() * 2,
+                        mBitmapHeads[i].getHeight() * 2,
+                        false);
+            }
+            mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody,
+                    mBitmapBody.getWidth() * 2,
+                    mBitmapBody.getHeight() * 2,
                     false);
+            doubleSize = true;
         }
-        mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody,
-                mBitmapBody.getWidth() * 2,
-                mBitmapBody.getHeight() * 2,
-                false);
-        this.setDoubleSize(true);
     }
 
-    public void halfSize(){
-        for (int i = 0; i < mBitmapHeads.length; i++) {
-            mBitmapHeads[i] = Bitmap.createScaledBitmap(mBitmapHeads[i],
-                    mBitmapHeads[i].getWidth() / 2,
-                    mBitmapHeads[i].getHeight() / 2,
+    public void halfSize() {
+        if (doubleSize) {  // Only reduce size if it is currently doubled
+            for (int i = 0; i < mBitmapHeads.length; i++) {
+                mBitmapHeads[i] = Bitmap.createScaledBitmap(mBitmapHeads[i],
+                        mBitmapHeads[i].getWidth() / 2,
+                        mBitmapHeads[i].getHeight() / 2,
+                        false);
+            }
+            mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody,
+                    mBitmapBody.getWidth() / 2,
+                    mBitmapBody.getHeight() / 2,
                     false);
+            doubleSize = false;
         }
-        mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody,
-                mBitmapBody.getWidth() / 2,
-                mBitmapBody.getHeight() / 2,
-                false);
-        this.setDoubleSize(false);
     }
-
 
     @Override
     public void spawn() {
@@ -100,6 +103,11 @@ class Gyarados extends GameObject implements  Drawable {
         heading = Heading.RIGHT;
         segmentLocations.clear();
         segmentLocations.add(new Point(width / 2, height / 2));
+
+        // Reset size to normal if doubled
+        if (doubleSize) {
+            halfSize();  // Adjust size back if it was doubled
+        }
     }
 
     void move() {

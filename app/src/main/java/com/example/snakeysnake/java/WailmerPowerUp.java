@@ -16,15 +16,15 @@ public class WailmerPowerUp implements PowerUps{
     private Context context;
     private final Point spawnRange;
     private final int size;
-    private Bitmap mushroomBitmap;
+    private Bitmap wailmerBitmap;
     private final Point location = new Point();
 
     public WailmerPowerUp(Context context, Point spawnRange, int size){
         this.context = context;
         this.spawnRange = spawnRange;
         this.size = size;
-        mushroomBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enlarge);
-        mushroomBitmap = Bitmap.createScaledBitmap(mushroomBitmap, size, size, false);
+        wailmerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.wailmer);
+        wailmerBitmap = Bitmap.createScaledBitmap(wailmerBitmap, size, size, false);
     }
 
 
@@ -45,7 +45,7 @@ public class WailmerPowerUp implements PowerUps{
     private void setLocation(int x, int y){this.location.set(x,y);}
 
     public void draw(Canvas canvas, Paint paint){
-        canvas.drawBitmap(mushroomBitmap, getLocation().x * size, getLocation().y*size,paint);
+        canvas.drawBitmap(wailmerBitmap, getLocation().x * size, getLocation().y*size,paint);
     }
 
 
