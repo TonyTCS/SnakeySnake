@@ -220,11 +220,4 @@ class Gyarados extends GameObject implements  Drawable {
         this.mSegmentSize = mSegmentSize;
     }
 
-    public boolean isDoubleSize() {
-        return doubleSize;
-    }
-
-    public void setDoubleSize(boolean doubleSize) {
-        this.doubleSize = doubleSize;
-    }
 }

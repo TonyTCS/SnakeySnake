@@ -11,7 +11,7 @@ import com.example.snakeysnake.R;
 
 import java.util.Random;
 
-public class WailmerPowerUp implements PowerUps{
+public class SlowpokeDebuff implements PowerUps{
 
     private Context context;
     private final Point spawnRange;
@@ -19,19 +19,27 @@ public class WailmerPowerUp implements PowerUps{
     private Bitmap wailmerBitmap;
     private final Point location = new Point();
 
-    public WailmerPowerUp(Context context, Point spawnRange, int size){
+    public SlowpokeDebuff(Context context, Point spawnRange, int size){
         this.context = context;
         this.spawnRange = spawnRange;
         this.size = size;
-        wailmerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.wailmer);
+        wailmerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.slowpoke);
         wailmerBitmap = Bitmap.createScaledBitmap(wailmerBitmap, size, size, false);
     }
 
-
     @Override
     public void applyPowerUps(SnakeGame sg) {
-
+        int currentFPS = sg.getTargetFPS();
+        // Check if the current FPS is greater than 5 before reducing it
+        if (currentFPS >= 7) {
+            sg.setTargetFPS(currentFPS - 3);
+        } else {
+            // Optionally, handle the case where FPS cannot be reduced further
+            // For example, notify the user, log a message, or set it to a minimum value
+            sg.setTargetFPS(4);  // This sets FPS to a minimum viable limit if it's too low to reduce
+        }
     }
+
 
     public Point getLocation() { return new Point(location);}
 

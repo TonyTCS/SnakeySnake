@@ -12,7 +12,7 @@ public class PowerUpDecoder {
     // add different power ups here
     public static void initializePowerUpDecoder(Context context, Point spawnRange, int size)  {
         powerUps.put("speed", new SharpedoPowerUp(context, spawnRange, size));
-        powerUps.put("grow", new WailmerPowerUp(context, spawnRange, size));
+        powerUps.put("slow", new SlowpokeDebuff(context, spawnRange, size));
         powerUps.put("poison", new QwilfishDebuff(context, spawnRange, size));
     }
 

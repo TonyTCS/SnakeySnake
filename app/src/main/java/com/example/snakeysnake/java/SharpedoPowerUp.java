@@ -32,7 +32,14 @@ public class SharpedoPowerUp implements PowerUps {
     @Override
     public void applyPowerUps(SnakeGame sg) {
         int currentFPS = sg.getTargetFPS();
-        sg.setTargetFPS(currentFPS + 3);
+        // Increase FPS by 3 only if current FPS is between 4 and 18 inclusive
+        if (currentFPS >= 4 && currentFPS <= 18) {
+            sg.setTargetFPS(currentFPS + 3);
+        } else {
+            // If FPS is not within the range, leave it unchanged
+            // Optionally, handle this case, e.g., log a message or notify the user
+            sg.setTargetFPS(currentFPS);  // Keeps FPS unchanged if it's outside the range
+        }
     }
 
     public Point getLocation() {

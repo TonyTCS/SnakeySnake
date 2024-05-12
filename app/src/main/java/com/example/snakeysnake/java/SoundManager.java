@@ -12,9 +12,10 @@ import java.io.IOException;
 
 public class SoundManager {
     private SoundPool mSoundPool;
-    private int mEatSoundId;
+
+    private int mSlowId;
     private int mLevelUpSoundId;  // ID for the level-up sound
-    private int mSmallerId;
+
     private int mCrashSoundId;
     private int mSpeedUpId;
 
@@ -46,9 +47,9 @@ public class SoundManager {
     private void loadSounds(Context context) {
         AssetManager assetManager = context.getAssets();
         loadSound(assetManager, "bump_wall.ogg", id -> mCrashSoundId = id);
-        loadSound(assetManager, "good.ogg", id -> mLevelUpSoundId = id);
+        loadSound(assetManager, "level_up.ogg", id -> mLevelUpSoundId = id);
         loadSound(assetManager, "agility.ogg", id -> mSpeedUpId = id);
-        loadSound(assetManager, "grow.ogg", id -> mGrowId = id);
+        loadSound(assetManager, "slow.ogg", id -> mSlowId = id);
         loadSound(assetManager, "stats_down.ogg", id -> mStatsDownId = id);
     }
 
@@ -61,17 +62,13 @@ public class SoundManager {
         }
     }
 
-    public void playEatSound() {
-        playSound(mEatSoundId);
-    }
+
 
     public void playCrashSound() {
         playSound(mCrashSoundId);
     }
 
-    public void playSmallerSound() {
-        playSound(mSmallerId);
-    }
+
 
     public void playLevelUp() {
         playSound(mLevelUpSoundId);
@@ -81,8 +78,8 @@ public class SoundManager {
         playSound(mSpeedUpId);
     }
 
-    public void playGrow(){
-        playSound(mGrowId);
+    public void playSlow(){
+        playSound(mSlowId);
     }
 
     public void playStatsDown(){
