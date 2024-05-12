@@ -21,7 +21,7 @@ class Apple extends GameObject implements Drawable {
         this.spawnRange = spawnRange;
         this.size = size;
         this.setLocation(-10, -10); // Initialize location off-screen
-        this.bitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.magickarp);
+        this.bitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.mk);
         this.bitmapApple = Bitmap.createScaledBitmap(this.bitmapApple, size, size, false);
     }
 
