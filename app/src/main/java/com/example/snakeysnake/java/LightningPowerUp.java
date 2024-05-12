@@ -25,7 +25,7 @@ public class LightningPowerUp implements PowerUps {
         this.context = context;
         this.spawnRange = spawnRange;
         this.size = size;
-        lightningBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.lightning);
+        lightningBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sharpedo);
         lightningBitmap = Bitmap.createScaledBitmap(lightningBitmap, size,size,false);
     }
 
