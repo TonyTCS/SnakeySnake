@@ -35,4 +35,3 @@ public class SnakeActivity extends Activity {
         setContentView(mSnakeGame);
     }
 }
-

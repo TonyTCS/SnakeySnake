@@ -1,4 +1,5 @@
 package com.example.snakeysnake.java;
+
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -9,15 +10,11 @@ import android.os.Build;
 
 import java.io.IOException;
 
-public class SoundManager {
-
+public class SpeedPowerupSound implements PowerupSoundStrategy {
     private SoundPool mSoundPool;
-    private int mEatSoundId;
+    private int mSpeedPowerupSound;
 
-    private int mSmallerId;
-    private int mCrashSoundId;
-
-    public SoundManager(Context context) {
+    public SpeedPowerupSound(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
@@ -38,28 +35,25 @@ public class SoundManager {
 
             // Load the sounds into memory
             descriptor = assetManager.openFd("get_apple.ogg");
-            mEatSoundId = mSoundPool.load(descriptor, 0);
+            mSpeedPowerupSound = mSoundPool.load(descriptor, 0);
 
-            descriptor = assetManager.openFd("snake_death.ogg");
-            mCrashSoundId = mSoundPool.load(descriptor, 0);
-
+            /*
+            // Example code from SoundManager Class
             descriptor = assetManager.openFd("pixel-death-66829.mp3");
             mSmallerId = mSoundPool.load(descriptor, 0);
+            */
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    @Override
+    public void playSound() {
+        // Play sound for lightning powerup
 
-    public void playEatSound() {
-        mSoundPool.play(mEatSoundId, 1, 1, 0, 0, 1);
     }
 
-    public void playCrashSound() {
-        mSoundPool.play(mCrashSoundId, 1, 1, 0, 0, 1);
-    }
-
-    public void playSmallerSound(){mSoundPool.play(mSmallerId, 1, 1, 0, 0, 1);}
+    public void playSpeedSound(){mSoundPool.play(mSpeedPowerupSound, 1, 1, 0, 0, 1);}
     public void release() {
         mSoundPool.release();
     }
