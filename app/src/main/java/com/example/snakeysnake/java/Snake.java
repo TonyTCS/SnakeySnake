@@ -34,7 +34,8 @@ class Snake extends GameObject implements  Drawable {
         this.mBitmapHeads[Heading.UP.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], -90);
         this.mBitmapHeads[Heading.DOWN.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], 180);
 
-        this.mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud);
+        this.mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.body
+        );
 
         this.halfWayPoint = moveRange.x * segmentSize / 2;
         this.doubleSize = false;
