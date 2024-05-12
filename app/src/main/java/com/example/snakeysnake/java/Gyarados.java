@@ -12,7 +12,7 @@ import com.example.snakeysnake.R;
 import java.util.ArrayList;
 
 
-class Snake extends GameObject implements  Drawable {
+class Gyarados extends GameObject implements  Drawable {
 
     private final ArrayList<Point> segmentLocations;
     private int mSegmentSize;
@@ -24,7 +24,7 @@ class Snake extends GameObject implements  Drawable {
     private Bitmap mBitmapBody;
     private boolean doubleSize;
 
-    Snake(Context context, Point moveRange, int segmentSize) {
+    Gyarados(Context context, Point moveRange, int segmentSize) {
         this.segmentLocations = new ArrayList<>();
         this.mSegmentSize = segmentSize;
         this.mMoveRange = moveRange;

@@ -10,14 +10,14 @@ import java.util.Random;
 import com.example.snakeysnake.R;
 
 
-class Apple extends GameObject implements Drawable {
+class Magikarp extends GameObject implements Drawable {
 
     private Point location = new Point();
     private final Point spawnRange;
     private final int size;
     private Bitmap bitmapApple;
 
-    Apple(Context context, Point spawnRange, int size) {
+    Magikarp(Context context, Point spawnRange, int size) {
         this.spawnRange = spawnRange;
         this.size = size;
         this.setLocation(-10, -10); // Initialize location off-screen

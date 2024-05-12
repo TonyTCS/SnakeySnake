@@ -5,7 +5,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 
-public class SnakeActivity extends Activity {
+public class GyaradosActivity extends Activity {
 
     private SnakeGame mSnakeGame;
 

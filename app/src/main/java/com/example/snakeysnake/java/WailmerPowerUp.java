@@ -11,7 +11,7 @@ import com.example.snakeysnake.R;
 
 import java.util.Random;
 
-public class SizeUpPowerUp implements PowerUps{
+public class WailmerPowerUp implements PowerUps{
 
     private Context context;
     private final Point spawnRange;
@@ -19,7 +19,7 @@ public class SizeUpPowerUp implements PowerUps{
     private Bitmap mushroomBitmap;
     private final Point location = new Point();
 
-    public SizeUpPowerUp(Context context, Point spawnRange, int size){
+    public WailmerPowerUp(Context context, Point spawnRange, int size){
         this.context = context;
         this.spawnRange = spawnRange;
         this.size = size;

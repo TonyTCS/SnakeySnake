@@ -22,13 +22,12 @@ import com.example.snakeysnake.R;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
 
 public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, Drawable {
 
     //    private List<Apple> apples;
-    private List<LightningPowerUp> lightningPowerUps;
-    private List<SizeUpPowerUp> sizeUpPowerUps;
+    private List<SharpedoPowerUp> sharpedoPowerUps;
+    private List<WailmerPowerUp> wailmerPowerUps;
     private static final int DEFAULT_TARGET_FPS = 5;
     private static int TARGET_FPS = DEFAULT_TARGET_FPS;
     private static final long MILLIS_PER_SECOND = 1000;
@@ -45,8 +44,8 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     private int mHighScore = 0;
     private SurfaceHolder mSurfaceHolder;
     private Paint mPaint;
-    private Snake mSnake;
-    private Apple mApple;
+    private Gyarados mGyarados;
+    private Magikarp mMagikarp;
     private Rect mPauseButtonRect;
     private boolean mPlayerDead = true;
     private Bitmap mBitmapBackground;
@@ -76,28 +75,25 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         mSoundManager = new SoundManager(context);
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
-        mSnake = new Snake(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
-        mApple = new Apple(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
+        mGyarados = new Gyarados(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
+        mMagikarp = new Magikarp(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
         this.x = size.x;
         this.y = size.y;
         this.setmTimer(0);
 
 
         // separate list of power ups
-        lightningPowerUps = new ArrayList<>();
-        sizeUpPowerUps = new ArrayList<>();
+        sharpedoPowerUps = new ArrayList<>();
+        wailmerPowerUps = new ArrayList<>();
 
         //calls methods to spawn obtainable objects/power-ups in game
         spawnLightningPowerUp(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
         spawnSizeUpPowerUp(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
 
-        // In your game code, where you create and manage powerups
-        Powerup lightningPowerup = new Powerup(new LightningPowerupSound(context));
-        Powerup speedPowerup = new Powerup(new SpeedPowerupSound(context));
+
 
         // When a powerup is applied
-        lightningPowerup.applyPowerup(); // This will play the sound for the lightning powerup
-        speedPowerup.applyPowerup(); // This will play the sound for the speed powerup
+
 
         int buttonSize = blockSize * 3;
         mPauseButtonRect = new Rect(0, size.y - buttonSize, buttonSize, size.y);
@@ -106,15 +102,15 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     }
 
     private void spawnSizeUpPowerUp(Context context, Point spawnRange, int size){
-        SizeUpPowerUp powerup = new SizeUpPowerUp(context, spawnRange, size);
+        WailmerPowerUp powerup = new WailmerPowerUp(context, spawnRange, size);
         powerup.spawn();
-        sizeUpPowerUps.add(powerup);
+        wailmerPowerUps.add(powerup);
     }
 
     private void spawnLightningPowerUp(Context context, Point spawnRange, int size) {
-        LightningPowerUp powerUp = new LightningPowerUp(context, spawnRange, size);
+        SharpedoPowerUp powerUp = new SharpedoPowerUp(context, spawnRange, size);
         powerUp.spawn();
-        lightningPowerUps.add(powerUp);
+        sharpedoPowerUps.add(powerUp);
     }
 
     @Override
@@ -138,15 +134,15 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     }
 
     private void update() {
-        mSnake.move();
-        if (mSnake.checkDinner(mApple.getLocation())) {
-            mApple.spawn();
+        mGyarados.move();
+        if (mGyarados.checkDinner(mMagikarp.getLocation())) {
+            mMagikarp.spawn();
             mScore++;
-            mSoundManager.playEatSound();
+            mSoundManager.playLevelUp();
         }
 
 
-        if (mSnake.detectDeath()) {
+        if (mGyarados.detectDeath()) {
             mSoundManager.playCrashSound();
             mPaused = true;
             mPlayerDead = true;
@@ -154,49 +150,49 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
             mPlayerDead = false;
         }
 
-        Iterator<LightningPowerUp> iterator = lightningPowerUps.iterator();
+        Iterator<SharpedoPowerUp> iterator = sharpedoPowerUps.iterator();
         while (iterator.hasNext()) {
-            LightningPowerUp lightningPowerUp = iterator.next();
-            if (mSnake.checkCollision(lightningPowerUp.getLocation())) {
+            SharpedoPowerUp sharpedoPowerUp = iterator.next();
+            if (mGyarados.checkCollision(sharpedoPowerUp.getLocation())) {
                 PowerUps powerUp = PowerUpDecoder.decodePowerUp("Lightning");
                 powerUp.applyPowerUps(this);
                 iterator.remove();
-                spawnLightningPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), mSnake.getSegmentSize());
-                mSoundManager.playEatSound();
+                spawnLightningPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), mGyarados.getSegmentSize());
+                mSoundManager.playSpeedUp();
                 break;
             }
         }
-        Iterator<SizeUpPowerUp> mIterator = sizeUpPowerUps.iterator();
+        Iterator<WailmerPowerUp> mIterator = wailmerPowerUps.iterator();
 
         //If snake eats mushroom grow *2 for 30 seconds
         if(!mIterator.hasNext() && checkTimer(mTimer) >= 30) {
             mSoundManager.playSmallerSound();
-            mSnake.halfSize();
-            spawnSizeUpPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), mSnake.getSegmentSize());
+            mGyarados.halfSize();
+            spawnSizeUpPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), mGyarados.getSegmentSize());
 
         } else if(mIterator.hasNext()){
             while (mIterator.hasNext()) {
-                SizeUpPowerUp sizeUpPowerUp = mIterator.next();
-                if (mSnake.checkCollision(sizeUpPowerUp.getLocation())) {
+                WailmerPowerUp wailmerPowerUp = mIterator.next();
+                if (mGyarados.checkCollision(wailmerPowerUp.getLocation())) {
                     PowerUps mPowerUp = PowerUpDecoder.decodePowerUp("Mushroom");
-                    //mPowerUp.applyPowerUps(this);
-                    mSnake.doubleSize();
+                    mPowerUp.applyPowerUps(this);
+                    mGyarados.doubleSize();
                     mIterator.remove();
                     this.setmTimer(System.nanoTime());
-                    mSoundManager.playEatSound();
+                    mSoundManager.playGrow();
                     break;
                 }
             }
         }
-//        for (LightningPowerUp lightningPowerUp: lightningPowerUps) {
-//            if (mSnake.checkDinner(lightningPowerUp.getLocation())) {
-//                PowerUps powerUps = PowerUpDecoder.decodePowerUp("Lightning");
-//                powerUps.applyPowerUps(this);
-//                lightningPowerUp.spawn();
-//                mScore++;
-//                mSoundManager.playEatSound();
-//            }
-//        }
+        for (SharpedoPowerUp sharpedoPowerUp : sharpedoPowerUps) {
+           if (mGyarados.checkDinner(sharpedoPowerUp.getLocation())) {
+               PowerUps powerUps = PowerUpDecoder.decodePowerUp("Lightning");
+                powerUps.applyPowerUps(this);
+                sharpedoPowerUp.spawn();
+               mScore++;
+                mSoundManager.playLevelUp();
+            }
+        }
 
         mNextFrameTime = System.currentTimeMillis() + MILLIS_PER_SECOND / TARGET_FPS;
     }
@@ -249,14 +245,14 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     }
 
     private void drawGameObjects() {
-        mApple.draw(mCanvas, mPaint);
-        mSnake.draw(mCanvas, mPaint);
+        mMagikarp.draw(mCanvas, mPaint);
+        mGyarados.draw(mCanvas, mPaint);
 
-        for (LightningPowerUp lightningPowerUp: lightningPowerUps) {
-            lightningPowerUp.draw(mCanvas,mPaint);
+        for (SharpedoPowerUp sharpedoPowerUp : sharpedoPowerUps) {
+            sharpedoPowerUp.draw(mCanvas,mPaint);
         }
-        for (SizeUpPowerUp sizeUpPowerUp: sizeUpPowerUps) {
-            sizeUpPowerUp.draw(mCanvas,mPaint);
+        for (WailmerPowerUp wailmerPowerUp : wailmerPowerUps) {
+            wailmerPowerUp.draw(mCanvas,mPaint);
         }
     }
 
@@ -332,7 +328,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
                         }
                         return true;
                     } else {
-                        mSnake.switchHeading(motionEvent);
+                        mGyarados.switchHeading(motionEvent);
                     }
                 }
                 if (mPlayerDead) {
@@ -349,11 +345,11 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
 
     private void newGame() {
         updateHighScore();
-        mSnake.reset(NUM_BLOCKS_WIDE, mNumBlocksHigh);
-        mApple.spawn();
-        lightningPowerUps.clear();
+        mGyarados.reset(NUM_BLOCKS_WIDE, mNumBlocksHigh);
+        mMagikarp.spawn();
+        sharpedoPowerUps.clear();
 
-        spawnLightningPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mSnake.getSegmentSize());
+        spawnLightningPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
         mScore = 0;
         mNextFrameTime = System.currentTimeMillis();
         mPlayerDead = true;

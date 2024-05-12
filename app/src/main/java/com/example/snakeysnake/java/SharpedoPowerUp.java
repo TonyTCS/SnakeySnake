@@ -11,7 +11,7 @@ import com.example.snakeysnake.R;
 
 import java.util.Random;
 
-public class LightningPowerUp implements PowerUps {
+public class SharpedoPowerUp implements PowerUps {
 
     //    private static final int SPEED_UP_FPS = 10;
     private Context context;
@@ -21,7 +21,7 @@ public class LightningPowerUp implements PowerUps {
     private final Point location = new Point();
 
 
-    public LightningPowerUp(Context context, Point spawnRange, int size) {
+    public SharpedoPowerUp(Context context, Point spawnRange, int size) {
         this.context = context;
         this.spawnRange = spawnRange;
         this.size = size;
