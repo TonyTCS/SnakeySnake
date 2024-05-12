@@ -78,6 +78,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     private void update() {
         mSnake.move();
         if (mSnake.checkDinner(mApple.getLocation())) {
+            mApple.applyEffect(mSnake); // Apply effect of the apple
             mApple.spawn();
             mScore++;
             mSoundManager.playEatSound();
