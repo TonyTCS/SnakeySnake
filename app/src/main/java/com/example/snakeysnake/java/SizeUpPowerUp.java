@@ -23,7 +23,7 @@ public class SizeUpPowerUp implements PowerUps{
         this.context = context;
         this.spawnRange = spawnRange;
         this.size = size;
-        mushroomBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.alienmushroom);
+        mushroomBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enlarge);
         mushroomBitmap = Bitmap.createScaledBitmap(mushroomBitmap, size, size, false);
     }
 
