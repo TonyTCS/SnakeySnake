@@ -28,7 +28,7 @@ public class QwilfishDebuff implements PowerUps {
     }
 
     @Override
-    public void applyPowerUps(SnakeGame sg) {
+    public void applyPowerUps(GyaradosGame sg) {
         sg.decrementScore(); // Method to decrement the score
     }
 

@@ -30,7 +30,7 @@ public class SharpedoPowerUp implements PowerUps {
     }
 
     @Override
-    public void applyPowerUps(SnakeGame sg) {
+    public void applyPowerUps(GyaradosGame sg) {
         int currentFPS = sg.getTargetFPS();
         // Increase FPS by 3 only if current FPS is between 4 and 18 inclusive
         if (currentFPS >= 4 && currentFPS <= 18) {

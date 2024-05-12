@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, Drawable {
+public class GyaradosGame extends SurfaceView implements Runnable, GameLifecycle, Drawable {
 
     private List<SharpedoPowerUp> sharpedoPowerUps;
     private List<SlowpokeDebuff> slowpokeDebuffs;
@@ -64,7 +64,8 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     }
 
 
-    public SnakeGame(Context context, Point size) {
+    public GyaradosGame(Context context, Point size) {
+
         super(context);
         initGame(context, size);
     }
@@ -72,6 +73,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     private void initGame(Context context, Point size) {
         int blockSize = size.x / NUM_BLOCKS_WIDE;
         mNumBlocksHigh = size.y / blockSize;
+
         mSoundManager = new SoundManager(context);
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
@@ -80,12 +82,11 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         this.x = size.x;
         this.y = size.y;
         this.setmTimer(0);
-
-
         // separate list of power ups
         sharpedoPowerUps = new ArrayList<>();
         slowpokeDebuffs = new ArrayList<>();
         qwilfishDebuffs = new ArrayList<>();
+
 
         //calls methods to spawn obtainable objects/power-ups in game
         spawnSharpedoPowerUp(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
@@ -94,15 +95,16 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
 
 
 
-        // When a powerup is applied
 
 
         int buttonSize = blockSize * 3;
         mPauseButtonRect = new Rect(0, size.y - buttonSize, buttonSize, size.y);
 
         PowerUpDecoder.initializePowerUpDecoder(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
-    }
 
+
+
+    }
     private void spawnSlowpokePowerUp(Context context, Point spawnRange, int size){
         SlowpokeDebuff powerup = new SlowpokeDebuff(context, spawnRange, size);
         powerup.spawn();
@@ -130,6 +132,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         }
     }
 
+
     private boolean updateRequired() {
         return mNextFrameTime <= System.currentTimeMillis();
     }
@@ -153,6 +156,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
             mSoundManager.playCrashSound();
             mPaused = true;
             mPlayerDead = true;
+            mSoundManager.stopSurf();
         } else {
             mPlayerDead = false;
         }
@@ -213,6 +217,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         mNextFrameTime = System.currentTimeMillis() + MILLIS_PER_SECOND / TARGET_FPS;
     }
 
+
     @Override
     public void draw() {
         if (mSurfaceHolder.getSurface().isValid()) {
@@ -225,6 +230,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
             drawGroupMembers(); // Call drawGroupMembers before unlocking and posting
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
+
     }
 
     private void drawBackground() {
@@ -336,6 +342,8 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
                 if (mPaused) {
                     if (mPauseButtonRect.contains(x, y)) {
                         if (!mPlayerDead) {
+                            mSoundManager.playSurf();
+                            mSoundManager.playMenu();
                             mPaused = false;
                         }
                         return true;
@@ -343,6 +351,8 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
                 } else {
                     if (mPauseButtonRect.contains(x, y)) {
                         if (!mPlayerDead) {
+                            mSoundManager.stopSurf();
+                            mSoundManager.playMenu();
                             mPaused = true;
                         }
                         return true;
@@ -363,16 +373,22 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     }
 
     private void newGame() {
+        mSoundManager.playSurf();
         mGyarados.reset(NUM_BLOCKS_WIDE, mNumBlocksHigh);
         updateHighScore();
         mGyarados.reset(NUM_BLOCKS_WIDE, mNumBlocksHigh);
         mMagikarp.spawn();
         sharpedoPowerUps.clear();
+        slowpokeDebuffs.clear();
+        qwilfishDebuffs.clear();
+
 
         spawnQwilfishDebuff(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
-        spawnSharpedoPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
-        spawnSharpedoPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
+        spawnQwilfishDebuff(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
         spawnSlowpokePowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
+        spawnSlowpokePowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
+        spawnSharpedoPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
+        spawnSharpedoPowerUp(getContext(), new Point(NUM_BLOCKS_WIDE,mNumBlocksHigh), mGyarados.getSegmentSize());
         mScore = 0;
         mNextFrameTime = System.currentTimeMillis();
         mPlayerDead = true;
@@ -381,6 +397,7 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
 
     @Override
     public void pause() {
+        mSoundManager.stopSurf();
         mPlaying = false;
         mSoundManager.release();
         try {

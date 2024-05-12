@@ -28,7 +28,7 @@ public class SlowpokeDebuff implements PowerUps{
     }
 
     @Override
-    public void applyPowerUps(SnakeGame sg) {
+    public void applyPowerUps(GyaradosGame sg) {
         int currentFPS = sg.getTargetFPS();
         // Check if the current FPS is greater than 5 before reducing it
         if (currentFPS >= 7) {
