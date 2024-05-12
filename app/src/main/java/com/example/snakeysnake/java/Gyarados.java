@@ -12,30 +12,65 @@ import com.example.snakeysnake.R;
 import java.util.ArrayList;
 
 
-class Snake extends GameObject implements  Drawable {
+class Gyarados extends GameObject implements  Drawable {
 
     private final ArrayList<Point> segmentLocations;
-    private final int mSegmentSize;
+    private int mSegmentSize;
     private final Point mMoveRange;
     private final int halfWayPoint;
     private enum Heading { UP, RIGHT, DOWN, LEFT }
     private Heading heading = Heading.RIGHT;
     private final Bitmap[] mBitmapHeads = new Bitmap[4];
     private Bitmap mBitmapBody;
+    private boolean doubleSize;
 
-    Snake(Context context, Point moveRange, int segmentSize) {
+    Gyarados(Context context, Point moveRange, int segmentSize) {
         this.segmentLocations = new ArrayList<>();
         this.mSegmentSize = segmentSize;
         this.mMoveRange = moveRange;
 
-        this.mBitmapHeads[Heading.RIGHT.ordinal()] = BitmapFactory.decodeResource(context.getResources(), R.drawable.helmet);
+        this.mBitmapHeads[Heading.RIGHT.ordinal()] = BitmapFactory.decodeResource(context.getResources(), R.drawable.gyarados);
         this.mBitmapHeads[Heading.LEFT.ordinal()] = flipBitmap(mBitmapHeads[Heading.RIGHT.ordinal()]);
         this.mBitmapHeads[Heading.UP.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], -90);
         this.mBitmapHeads[Heading.DOWN.ordinal()] = rotateBitmap(mBitmapHeads[Heading.RIGHT.ordinal()], 180);
 
-        this.mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud);
+        this.mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.bluebody
+        );
 
         this.halfWayPoint = moveRange.x * segmentSize / 2;
+        this.doubleSize = false;
+    }
+
+    public void doubleSize() {
+        if (!doubleSize) {  // Only double size if not already doubled
+            for (int i = 0; i < mBitmapHeads.length; i++) {
+                mBitmapHeads[i] = Bitmap.createScaledBitmap(mBitmapHeads[i],
+                        mBitmapHeads[i].getWidth() * 2,
+                        mBitmapHeads[i].getHeight() * 2,
+                        false);
+            }
+            mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody,
+                    mBitmapBody.getWidth() * 2,
+                    mBitmapBody.getHeight() * 2,
+                    false);
+            doubleSize = true;
+        }
+    }
+
+    public void halfSize() {
+        if (doubleSize) {  // Only reduce size if it is currently doubled
+            for (int i = 0; i < mBitmapHeads.length; i++) {
+                mBitmapHeads[i] = Bitmap.createScaledBitmap(mBitmapHeads[i],
+                        mBitmapHeads[i].getWidth() / 2,
+                        mBitmapHeads[i].getHeight() / 2,
+                        false);
+            }
+            mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody,
+                    mBitmapBody.getWidth() / 2,
+                    mBitmapBody.getHeight() / 2,
+                    false);
+            doubleSize = false;
+        }
     }
 
     @Override
@@ -68,6 +103,11 @@ class Snake extends GameObject implements  Drawable {
         heading = Heading.RIGHT;
         segmentLocations.clear();
         segmentLocations.add(new Point(width / 2, height / 2));
+
+        // Reset size to normal if doubled
+        if (doubleSize) {
+            halfSize();  // Adjust size back if it was doubled
+        }
     }
 
     void move() {
@@ -106,6 +146,13 @@ class Snake extends GameObject implements  Drawable {
     boolean checkDinner(Point location) {
         if (!segmentLocations.isEmpty() && segmentLocations.get(0).equals(location)) {
             segmentLocations.add(new Point(-10, -10));
+            return true;
+        }
+        return false;
+    }
+
+    boolean checkCollision(Point location) {
+        if (!segmentLocations.isEmpty() && segmentLocations.get(0).equals(location)) {
             return true;
         }
         return false;
@@ -164,5 +211,13 @@ class Snake extends GameObject implements  Drawable {
         matrix.preRotate(angle);
         return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
     }
-}
 
+    public int getSegmentSize() {
+        return mSegmentSize;
+    }
+
+    public void setmSegmentSize(int mSegmentSize) {
+        this.mSegmentSize = mSegmentSize;
+    }
+
+}

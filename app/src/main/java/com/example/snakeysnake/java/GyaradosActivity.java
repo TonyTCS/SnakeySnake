@@ -5,9 +5,9 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 
-public class SnakeActivity extends Activity {
+public class GyaradosActivity extends Activity {
 
-    private SnakeGame mSnakeGame;
+    private GyaradosGame mGyaradosGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,21 +18,20 @@ public class SnakeActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mSnakeGame.resume();
+        mGyaradosGame.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSnakeGame.pause();
+        mGyaradosGame.pause();
     }
 
     private void initializeSnakeGame() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        mSnakeGame = new SnakeGame(this, size);
-        setContentView(mSnakeGame);
+        mGyaradosGame = new GyaradosGame(this, size);
+        setContentView(mGyaradosGame);
     }
 }
-
