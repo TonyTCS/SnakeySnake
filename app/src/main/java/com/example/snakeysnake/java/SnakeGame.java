@@ -51,16 +51,12 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         mSoundManager = new SoundManager(context);
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
-
-        // Choose the appropriate AppleType
-        AppleType appleType = new SpeedApple(); // Or NormalApple, or any other specific type
-
-        mApple = new Apple(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize, appleType);
+        mApple = new Apple(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
         mSnake = new Snake(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
-
         int buttonSize = blockSize * 3;
         mPauseButtonRect = new Rect(0, size.y - buttonSize, buttonSize, size.y);
     }
+
     @Override
     public void run() {
         while (mPlaying) {
@@ -78,7 +74,6 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
     private void update() {
         mSnake.move();
         if (mSnake.checkDinner(mApple.getLocation())) {
-            mApple.applyEffect(mSnake); // Apply effect of the apple
             mApple.spawn();
             mScore++;
             mSoundManager.playEatSound();
@@ -161,14 +156,13 @@ public class SnakeGame extends SurfaceView implements Runnable, GameLifecycle, D
         // Draw the group members' names with transparency and custom font
         Paint paint = new Paint();
         paint.setColor(Color.argb(alphaValue, 255, 255, 255)); // Set color to white with alpha
-        paint.setTextSize(43);
+        paint.setTextSize(60);
         paint.setTypeface(typeface); // Set custom font
 
-        // Draw teammates names
+        // Draw "Tony Tran"
         mCanvas.drawText("Tony Tran", mCanvas.getWidth() - 400, 90, paint);
-        mCanvas.drawText("Maria Valencia", mCanvas.getWidth() - 400, 165, paint);
-        mCanvas.drawText("Armaan Randhawa", mCanvas.getWidth() - 400, 235, paint);
-        mCanvas.drawText("Brian Hert", mCanvas.getWidth() - 400, 305, paint);
+        // Draw "Saboor Malik"
+        mCanvas.drawText("Saboor Malik", mCanvas.getWidth() - 400, 165, paint);
     }
 
 
